@@ -2,21 +2,24 @@
 
 1. Install Mamba package manager:
 
-.. code-block:: bash
+```bash
 
 conda install -n base -c conda-forge mamba  
+```
 
 2. Create a new conda environment named `16s_ont` and install Snakemake:
 
-.. code-block:: bash
+```bash
 
 mamba create -c conda-forge -c bioconda -n 16s_ont snakemake
+```
 
 3. Activate the `16s_ont` environment:
 
-.. code-block:: bash
+```bash
 
 conda activate 16s_ont
+```
 
 
 ## Usage:
@@ -25,9 +28,11 @@ You need activate `16s_ont` environment before every usage
 
 From directory /workflow: or write pathway to Snakefile
 
-.. code-block:: bash
+```bash
 
 snakemake --snakefile Snakefile --config folder="/home/masha/Artem/Liza/V3-V4/test_tmp" database="bacter" min_len=50 qc=10 max_len=10000 -c 16 --use-conda
+```
+
 
 `folder path` path until directory with raw ont fastq files
 `min_len` minimal length of read
