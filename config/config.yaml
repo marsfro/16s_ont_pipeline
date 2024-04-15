@@ -1,0 +1,15 @@
+---
+## General Workflow Parameters:
+samples: "../resources/samples.tsv"
+
+# Name of the Workflow:
+workflow: "16s ont pipeline"
+
+
+# Centrifuge
+centrifuge_db: 
+    bacter: "../databases/centrifuge-ncbi-16s-db.tar.gz"
+    fungi: "/path/to/fungi/database"
+    parasites: "/path/to/parasites/database"
+
+

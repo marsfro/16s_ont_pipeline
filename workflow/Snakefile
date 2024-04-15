@@ -2,19 +2,24 @@
 
 from snakemake.io import glob_wildcards
 import sys
+
 configfile: "../config/config.yaml"
+
 
 min_len = config["min_len"]
 qc = config["qc"]
+max_len = config["max_len"]
 
 
 rule all:
     input:
         expand("result/reports/{sample}_report.txt", folder=config["folder"],
                sample=glob_wildcards(config["folder"] + "/{sample}.fastq")[0]),
-        expand("result/reports/{sample}_result.txt", folder=config["folder"],
-               sample=glob_wildcards(config["folder"] + "/{sample}.fastq")[0])
-
+        expand("result/results/{sample}_result.txt", folder=config["folder"],
+               sample=glob_wildcards(config["folder"] + "/{sample}.fastq")[0]),
+        "result/taxonomy/species_report_vert.csv",
+        "result/taxonomy/genus_report.csv",
+        "result/taxonomy/Species_Shannon_hor.csv"
 
 
 rule porechop:
@@ -28,7 +33,6 @@ rule porechop:
         "porechop -i {input.files} -o {output}"
 
  
-
 rule nanofilt:
     input:
         "result/{sample}_trimmed.fastq"
@@ -36,11 +40,12 @@ rule nanofilt:
         "result/{sample}_filtered.fastq"
     params:
         min_len=int(config["min_len"]),
-        qc=int(config["qc"])
+        qc=int(config["qc"]),
+        max_len=int(config["max_len"])
     conda:
         "envs/nanofilt.yaml"
     shell:
-        "NanoFilt -l {params.min_len} -q {params.qc} < {input} > {output}"
+        "NanoFilt -l {params.min_len} -q {params.qc} --maxlength {params.max_len} < {input} > {output}"
 
 
 rule centrifuge:
@@ -48,24 +53,27 @@ rule centrifuge:
         "result/{sample}_filtered.fastq"
     output:
         report="result/reports/{sample}_report.txt",
-        result="result/reports/{sample}_result.txt"
+        result="result/results/{sample}_result.txt"
     params:
-        centrifuge_db=config["centrifuge_db"]  
+        centrifuge_db=lambda wildcards: config["centrifuge_db"][config["database"]]
     conda:
         "envs/centrifuge.yaml"
     shell:
         "centrifuge -x {params.centrifuge_db} -U {input} -p 16 --report-file {output.report} -S {output.result}"
 
 
-
-
-#rule bwa_mapping:
-#    input:
-#        reference="human_reference.fasta",
-#        reads="result/{sample}_filtered.fastq"
-#    output:
-#        "result/{sample}_mapped.bam"
-#    shell:
-#        "bwa mem {input.reference} {input.reads} | samtools view -Sb - > {output}"      
-        
-
+rule py_script:
+    input:
+        expand("result/reports/{sample}_report.txt", folder=config["folder"],
+               sample=glob_wildcards(config["folder"] + "/{sample}.fastq")[0])
+    message:
+        "It Takes TIME"
+    output:
+        "result/taxonomy/species_report_vert.csv",
+        "result/taxonomy/genus_report.csv",
+        "result/taxonomy/Species_Shannon_hor.csv"
+    conda:
+        "envs/py_script.yaml"
+    shell:
+        "python scripts/py2centrifuge.py {input}"    
+    

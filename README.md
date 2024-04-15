@@ -1,38 +1,44 @@
-##Install
+## Install
+
+1. Install Mamba package manager:
+
+.. code-block:: bash
 
 conda install -n base -c conda-forge mamba  
 
+2. Create a new conda environment named `16s_ont` and install Snakemake:
+
+.. code-block:: bash
+
 mamba create -c conda-forge -c bioconda -n 16s_ont snakemake
+
+3. Activate the `16s_ont` environment:
+
+.. code-block:: bash
 
 conda activate 16s_ont
 
 
-##Usage:
+## Usage:
 
-from dir /workflow:
+You need activate `16s_ont` environment before every usage
 
-snakemake --snakefile Snakefile --config folder="/path/to/fastq" min_len=50 qc=10 -c 16 --use-conda
+From directory /workflow: or write pathway to Snakefile
 
+.. code-block:: bash
 
-###Requirements:
+snakemake --snakefile Snakefile --config folder="/home/masha/Artem/Liza/V3-V4/test_tmp" database="bacter" min_len=50 qc=10 max_len=10000 -c 16 --use-conda
 
- - Porechope  # remove adaptors
-https://github.com/rrwick/Porechop
-pip3 install git+https://github.com/rrwick/Porechop.git
+`folder path` path until directory with raw ont fastq files
+`min_len` minimal length of read
+`max_len` maximal length of read
+`qc minimal` quality of read
+`-c` number of threads 
+`database` "bacter" , "fungi", "parasites"
 
-
- - Nanofilt # trimming based on quality and length
-https://github.com/wdecoster/nanofilt     
-
-
-- Centrifuge:
-
-https://github.com/infphilo/centrifuge
-
-git clone https://github.com/infphilo/centrifuge
-cd centrifuge
-make
-sudo make install prefix=/usr/local
+You can use several database - for that you need to show pathways to database in
+`\16s_ont_pipeline\config\config.yaml` and then use flag `bacter` , `fungi`, `parasites`
+or something else you want
 
 - Download database for Centrifuge:
 
