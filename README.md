@@ -30,20 +30,20 @@ From directory /workflow: or write pathway to Snakefile
 
 ```bash
 
-snakemake --snakefile Snakefile --config folder="/home/masha/Artem/Liza/V3-V4/test_tmp" database="bacter" min_len=50 qc=10 max_len=10000 -c 16 --use-conda
+snakemake --snakefile Snakefile --config folder="/path/to/fastq/files" database="bacter" min_len=50 qc=10 max_len=10000 -c 16 --use-conda
 ```
 
 
-`folder path` path until directory with raw ont fastq files
-`min_len` minimal length of read
-`max_len` maximal length of read
-`qc minimal` quality of read
-`-c` number of threads 
-`database` "bacter" , "fungi", "parasites"
+`folder` path until directory with raw ont fastq files  
+`min_len` minimal length of read  
+`max_len` maximal length of read  
+`qc minimal` quality of read  
+`-c` number of threads   
+`database` "bacter" , "fungi", "parasites"  
 
-You can use several database - for that you need to show pathways to database in
-`\16s_ont_pipeline\config\config.yaml` and then use flag `bacter` , `fungi`, `parasites`
-or something else you want
+You can use several database - for that you need to show pathways to database in  
+`\16s_ont_pipeline\config\config.yaml` and then use flag `bacter` , `fungi`, `parasites`  
+or something else you want  
 
 - Download database for Centrifuge:
 
